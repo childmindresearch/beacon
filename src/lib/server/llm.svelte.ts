@@ -22,7 +22,6 @@ export class Llm {
         model: string = LLM_DEFAULT_MODEL,
         provider: LlmProvider = LLM_DEFAULT_PROVIDER as LlmProvider
     ) {
-        console.log(model)
         this.client = this.getClient(provider)
         this.model = this.client(model)
     }
