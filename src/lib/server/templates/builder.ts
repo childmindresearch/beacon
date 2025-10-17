@@ -39,23 +39,17 @@ type Awaitable<T> =
         ? T
         : // mutable arrays
           T extends (infer U)[]
-          ?
-                | (Awaitable<U> | Promise<U | null> | null)[]
-                | Promise<(Awaitable<U> | null)[]>
-                | Promise<(Awaitable<U> | null)[]>[]
+          ? Promise<U | NullComponent>[]
           : // readonly arrays
             T extends ReadonlyArray<infer U>
-            ?
-                  | ReadonlyArray<Awaitable<U> | Promise<U | null> | null>
-                  | Promise<ReadonlyArray<Awaitable<U> | null>>
-                  | Promise<(Awaitable<U> | null)[]>[]
+            ? ReadonlyArray<Promise<U | NullComponent>>
             : // plain objects
               T extends Record<string, unknown>
               ?
                     | { [K in keyof T]: Awaitable<T[K]> }
                     | Promise<{ [K in keyof T]: Awaitable<T[K]> }>
               : // scalars
-                T | Promise<T> | null
+                T | Promise<T>
 
 type AwaitableProps<T> = {
     [K in keyof T]: T[K] extends Array<infer U>
