@@ -85,6 +85,13 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 }
 
 /*
+ * Empty component used for filtering components whose predicate evaluates to false.
+ */
+class NullComponent {
+    constructor() {}
+}
+
+/*
  * Utility function to resolve all awaitable properties on an object.
  * Handles promises in arrays and recurses into other objects.
  */
@@ -108,8 +115,12 @@ async function resolveProps<T extends Record<string, unknown>>(
                         return val
                     })
                 )
-                // Filter null to deal with components whose predicate evaluates to false.
-                return [k, recursedArray.flat().filter((val) => val !== null)]
+                return [
+                    k,
+                    recursedArray
+                        .flat()
+                        .filter((val) => !(val instanceof NullComponent)),
+                ]
             }
             if (isPlainObject(resolvedValue)) {
                 return [
@@ -134,9 +145,9 @@ function createBaseBuilder<
 >(ComponentClass: new (options: TOptions) => TComponent) {
     return async (
         options: AwaitablePropsWithPredicate<TOptions>
-    ): Promise<TComponent | null> => {
+    ): Promise<TComponent | NullComponent> => {
         const { predicate, ...optionsWithoutPredicate } = options
-        if (predicate && !(await predicate())) return null
+        if (predicate && !(await predicate())) return new NullComponent()
 
         return new ComponentClass(
             await resolveProps(
@@ -155,11 +166,10 @@ function createStringBuilder<
 >(ComponentClass: new (options: TOptions | string) => TComponent) {
     return async (
         options: AwaitablePropsWithPredicate<TOptions> | Awaitable<string>
-    ): Promise<TComponent | null> => {
+    ): Promise<TComponent | NullComponent> => {
         const resolved = await options
-        if (resolved === null) {
-            return null
-        }
+        if (resolved === null) return new NullComponent()
+
         if (typeof resolved === 'string') {
             return new ComponentClass(resolved)
         }
@@ -294,9 +304,9 @@ export class DocxBuilder {
      */
     async section(
         options: AwaitablePropsWithPredicate<ISectionOptions>
-    ): Promise<ISectionOptions | null> {
+    ): Promise<ISectionOptions | NullComponent> {
         const { predicate, ...otherOptions } = options
-        if (predicate && !(await predicate())) return null
+        if (predicate && !(await predicate())) return new NullComponent()
         return await resolveProps(
             otherOptions as AwaitableProps<ISectionOptions>
         )
