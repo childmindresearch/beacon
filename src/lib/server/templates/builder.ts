@@ -19,6 +19,8 @@ import {
     type ITableOptions,
     type ITableRowOptions,
     Paragraph,
+    patchDocument,
+    type PatchDocumentOptions,
     Table,
     TableCell,
     TableRow,
@@ -318,5 +320,10 @@ export class DocxBuilder {
             ...resolved,
             comments: { children: this.commentRegistry.flush() },
         })
+    }
+
+    async patchDocument(options: AwaitableProps<PatchDocumentOptions>) {
+        const resolved = await resolveProps(options)
+        return patchDocument(resolved)
     }
 }
