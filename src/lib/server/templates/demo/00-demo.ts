@@ -11,27 +11,27 @@ export async function demoDoc(): Promise<Document> {
         sections: [
             builder.section({
                 children: [
-                    builder.paragraph({ text: 'Hello world!' }),
-                    builder.paragraph(
+                    builder.Paragraph({ text: 'Hello world!' }),
+                    builder.Paragraph(
                         arbitraryAwaitable('My awaited string output.')
                     ),
-                    builder.paragraph({
+                    builder.Paragraph({
                         text: 'This will not appear.',
                         predicate: () => {
                             return false
                         },
                     }),
 
-                    builder.paragraph({
+                    builder.Paragraph({
                         children: [
                             builder.llm.textRun({
                                 prompt: 'this is the test prompt',
                             }),
                         ],
                     }),
-                    builder.paragraph({
+                    builder.Paragraph({
                         children: [
-                            builder.textRun({
+                            builder.TextRun({
                                 text: 'No.',
                             }),
                         ],

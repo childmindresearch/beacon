@@ -278,17 +278,17 @@ export class DocxBuilder {
     readonly commentRegistry: CommentRegistry
     readonly llm: LlmBuilder
 
-    paragraph = createStringBuilder<IParagraphOptions, Paragraph>(Paragraph)
-    textRun = createStringBuilder<IRunOptions, TextRun>(TextRun)
+    Paragraph = createStringBuilder<IParagraphOptions, Paragraph>(Paragraph)
+    TextRun = createStringBuilder<IRunOptions, TextRun>(TextRun)
 
-    table = createBaseBuilder<ITableOptions, Table>(Table)
-    tableRow = createBaseBuilder<ITableRowOptions, TableRow>(TableRow)
-    tableCell = createBaseBuilder<ITableCellOptions, TableCell>(TableCell)
+    Table = createBaseBuilder<ITableOptions, Table>(Table)
+    TableRow = createBaseBuilder<ITableRowOptions, TableRow>(TableRow)
+    TableCell = createBaseBuilder<ITableCellOptions, TableCell>(TableCell)
 
-    imageRun = createBaseBuilder<IImageOptions, ImageRun>(ImageRun)
+    ImageRun = createBaseBuilder<IImageOptions, ImageRun>(ImageRun)
 
-    header = createBaseBuilder<IHeaderOptions, Header>(Header)
-    footer = createBaseBuilder<IHeaderOptions, Footer>(Footer)
+    Header = createBaseBuilder<IHeaderOptions, Header>(Header)
+    Footer = createBaseBuilder<IHeaderOptions, Footer>(Footer)
 
     constructor() {
         this.commentRegistry = new CommentRegistry()
